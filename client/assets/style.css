@@ -1,0 +1,46 @@
+.hero_bg {
+  background-color: #46b3c4;
+  position: relative;
+  margin-bottom: 1em;
+}
+
+.hero_bg::before {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  content: '';
+  opacity: 0.05;
+  background-image: url("img/pattern.png");
+  background-size: 160px 168px;
+}
+
+.browse {
+  margin: 2em auto;
+}
+
+.category {
+  margin: 0 1em;
+}
+
+.all {
+  margin: 1em 1em;
+}
+
+.footer {
+  background-color: #4f5f6f;
+  padding: 2em 2em;
+  margin-top: 2em;
+  color: whitesmoke;
+}
+
+.footer a:hover {
+  color: #ff3860;
+}
+
+.fa-heart {
+  color: #fb866a;
+}
+
+/* orange #E55400 */
