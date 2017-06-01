@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ecommerce-Layout</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+
+          <a class="navbar-brand" href="#">Erler-Store</a>
+
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+
+          <ul class="nav navbar-nav navbar-right">
+            <li data-toggle="modal" data-target="#myModal"><a><span class="glyphicon glyphicon-shopping-cart" style="margin-right: 10px"></span>&nbsp;Cart</a></li>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" v-for= "cart in carts">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                  </div>
+                  <div class="modal-body" >
+                    <h1>{{  cart }}</h1>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <li><a href="login.html">Login</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <!-- header -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12" >
+          <div class="jumbotron" style="background-image:url(https://s-media-cache-ak0.pinimg.com/originals/03/b1/bc/03b1bc055c77b932865e7f19b2f414a2.jpg)">
+            <div class="text-color">
+              <h1>Welcome to Flower Shop</h1>
+              <p>we have anything about flower here</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <!-- end of header -->
+    <!-- main-content -->
+    <div id="app">
+      <div class="container">
+        <div class="row">
+        	<div class="col-md-12">
+            <div class="row">
+
+              <!-- <div class="col-sm-6 col-md-4">
+
+                <div class="thumbnail" >
+                  <h4 class="text-center"><span class="label label-info" v-for="item in getItem">{{ item.category }}</span></h4>
+                  <img src="https://static.pexels.com/photos/87452/flowers-background-butterflies-beautiful-87452.jpeg" class="img-responsive">
+                  <div class="caption">
+                    <div class="row">
+                      <div class="col-md-6 col-xs-6">
+                        <h3 v-for="item in getItem">{{ item.name }}</h3>
+                      </div>
+                      <div class="col-md-6 col-xs-6 price">
+                        <h3>
+                        <label>$2.99</label></h3>
+                      </div>
+                    </div>
+                    <p>Yellowssom Flower Awesome For Your Girl/Boy-Firends</p>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                      </div>
+                      <div class="col-md-6">
+                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
+                    </div>
+
+                    <p> </p>
+                  </div>
+                </div>
+
+              </div> -->
+
+              <div class="col-sm-6 col-md-4" v-for= "item in items">
+                <div class="thumbnail" >
+                  <h4 class="text-center"><span class="label label-info">{{ item.category }}</span></h4>
+                  <img v-bind:src="item.image" class="img-responsive">
+                  <div class="caption">
+                    <div class="row">
+                      <div class="col-md-6 col-xs-6">
+                        <h3>{{ item.name }}</h3>
+                      </div>
+                      <div class="col-md-6 col-xs-6 price">
+                        <h3>
+                        <label>Rp. {{ item.price }}</label></h3>
+                      </div>
+                    </div>
+                    <p>{{ item.description }}</p>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                      </div>
+                      <div class="col-md-6">
+                        <button type="button" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart" v-on:click="addToCart(item)"></span> Buy</div></button>
+                        <!-- <a class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart" v-on:click="addToCart(item)"></span> Buy</a></div> -->
+                    </div>
+
+                    <p> </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="col-sm-6 col-md-4">
+                <div class="thumbnail" >
+                  <h4 class="text-center"><span class="label label-info">Pink Flower</span></h4>
+                  <img src="https://static.pexels.com/photos/27714/pexels-photo-27714.jpg" class="img-responsive">
+                  <div class="caption">
+                    <div class="row">
+                      <div class="col-md-6 col-xs-6">
+                        <h3>Lumiasoom</h3>
+                      </div>
+                      <div class="col-md-6 col-xs-6 price">
+                        <h3>
+                        <label>$4.00</label></h3>
+                      </div>
+                    </div>
+                    <p>Lumiasoom Flower Awesome For Your Girl/Boy-Friends</p>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                      </div>
+                      <div class="col-md-6">
+                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
+                    </div>
+
+                    <p> </p>
+                  </div>
+                </div>
+               </div>
+
+               <div class="col-sm-6 col-md-4">
+                <div class="thumbnail" >
+                  <h4 class="text-center"><span class="label label-info">Samsung Flower</span></h4>
+                  <img src="/image/pink4.jpg" class="img-responsive">
+                  <div class="caption">
+                    <div class="row">
+                      <div class="col-md-6 col-xs-6">
+                        <h3>Yellowssom</h3>
+                      </div>
+                      <div class="col-md-6 col-xs-6 price">
+                        <h3>
+                        <label>$2.99</label></h3>
+                      </div>
+                    </div>
+                    <p>Yellowssom Flower Awesome For Your Girl/Boy-Firends</p>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                      </div>
+                      <div class="col-md-6">
+                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
+                    </div>
+
+                    <p> </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4">
+                <div class="thumbnail" >
+                  <h4 class="text-center"><span class="label label-info">Samsung Flower</span></h4>
+                  <img src="/image/sun.jpg" class="img-responsive">
+                  <div class="caption">
+                    <div class="row">
+                      <div class="col-md-6 col-xs-6">
+                        <h3>Yellowssom</h3>
+                      </div>
+                      <div class="col-md-6 col-xs-6 price">
+                        <h3>
+                        <label>$2.99</label></h3>
+                      </div>
+                    </div>
+                    <p>Yellowssom Flower Awesome For Your Girl/Boy-Firends</p>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                      </div>
+                      <div class="col-md-6">
+                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
+                    </div>
+
+                    <p> </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-4">
+                <div class="thumbnail" >
+                  <h4 class="text-center"><span class="label label-info">Samsung Flower</span></h4>
+                  <img src="/image/pinkball.jpg" class="img-responsive">
+                  <div class="caption">
+                    <div class="row">
+                      <div class="col-md-6 col-xs-6">
+                        <h3>Yellowssom</h3>
+                      </div>
+                      <div class="col-md-6 col-xs-6 price">
+                        <h3>
+                        <label>$2.99</label></h3>
+                      </div>
+                    </div>
+                    <p>Yellowssom Flower Awesome For Your Girl/Boy-Firends</p>
+                    <div class="row">
+                      <div class="col-md-3">
+                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                      </div>
+                      <div class="col-md-6">
+                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
+                    </div>
+
+                    <p> </p>
+                  </div>
+                </div>
+              </div> -->
+
+            </div>
+
+          </div>
+
+      	</div>
+      </div>
+    </div>
+
+    <!-- end of main-content -->
+
+    <!-- main-categor -->
+    <div class="container">
+      <div class="col-md-12" style="padding:0">
+        <ul class="list-group" style="margin-bottom:0">
+         <li class="list-group-item text-center" style="background-color:#21313F"><b>Category</b></li>
+        </ul>
+      </div>
+      <div class="row" style="padding:15px">
+        <div class="col-md-4" style="padding:0">
+          <ul class="list-group">
+           <li class="list-group-item"><a href="#"><img src="/icon/blue-old.ico" alt="">&nbsp;Aubrieta</a></li>
+           <li class="list-group-item"><a href="#"><img src="/icon/pink.ico" alt="">&nbsp;Aubrieta</a></li>
+           <li class="list-group-item"><a href="#"><img src="/icon/pink2.ico" alt="">&nbsp;Aubrieta</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4" style="padding:0">
+          <ul class="list-group">
+            <li class="list-group-item"><a href="#"><img src="/icon/pink3.ico" alt="">&nbsp;Aubrieta</a></li>
+            <li class="list-group-item"><a href="#"><img src="/icon/pink-rose.ico" alt="">&nbsp;Aubrieta</a></li>
+            <li class="list-group-item"><a href="#"><img src="/icon/purple.ico" alt="">&nbsp;Aubrieta</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4" style="padding:0">
+          <ul class="list-group">
+            <li class="list-group-item"><a href="#"><img src="/icon/red_rose.ico" alt="">&nbsp;Aubrieta</a></li>
+            <li class="list-group-item"><a href="#"><img src="/icon/white.ico" alt="">&nbsp;Aubrieta</a></li>
+            <li class="list-group-item"><a href="#"><img src="/icon/sun_flower.ico" alt="">&nbsp;Aubrieta</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    <script type="text/javascript">
+      var app = new Vue ({
+        el: '#app',
+        data: {
+          items: [],
+          carts: []
+        },
+        created: function() {
+          this.getItem()
+        },
+        methods: {
+          getItem: function() {
+            var self = this;
+            axios.get('http://localhost:3000/api/items')
+            .then(function (response) {
+              console.log(JSON.stringify(response.data));
+              self.items = response.data
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          },
+          addToCart: function(item) {
+             var data = this.carts
+             var kerangjang = []
+             kerangjang.push(data)
+             this.carts = kerangjang;
+             console.log("------------------>>>>",data);
+            console.log('===================>>>  ',this.carts);
+          }
+        }
+      })
+    </script>
+  </body>
+  <footer>
+    <div class="footer" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3> Contact </h3>
+                    <ul>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3> Important Links </h3>
+                    <ul>
+                        <li> <a href="#"> Admission </a> </li>
+                        <li> <a href="#"> Academic </a> </li>
+                        <li> <a href="#"> Career </a> </li>
+                        <li> <a href="#"> Administration </a> </li>
+                        <li> <a href="#"> Notice </a> </li>
+                        <li> <a href="#"> Tender </a> </li>
+                        <li> <a href="login.php"> Teacher Login </a> </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3> Location </h3>
+                    <ul>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                    </ul>
+                </div>
+            </div>
+            <!--/.row-->
+        </div>
+        <!--/.container-->
+    </div>
+
+    <div class="all_category_container">
+
+    </div>
+
+
+    <!--/.footer-->
+    <div class="footer-bottom">
+        <div class="container">
+            <p class="pull-left"> Copyright © 2017, & Copyleft &copy; 2017.</p>
+            <div class="pull-right">
+                <ul class="nav nav-pills payments">
+                    <li><i class="fa fa-cc-visa"></i></li>
+                    <li><i class="fa fa-cc-mastercard"></i></li>
+                    <li><i class="fa fa-cc-amex"></i></li>
+                    <li><i class="fa fa-cc-paypal"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--/.footer-bottom-->
+</footer>
+</html>

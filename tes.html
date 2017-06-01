@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <title></title>
+
+  <script src="https://unpkg.com/vue"></script>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+
+  <div id="app">
+    <h1>Hello Gray!</h1>
+    <input type="button" v-bind:value="valueBtn">
+    <br><br>
+    <h1>{{msg}}</h1>
+    <h2 v-if="msg === 'Hello gray!'">Sudah login</h2>
+    <h2 v-else-if = "msg === 'Bukan hello gray!'">Belum Login</h2>
+    <h2 v-else>Auk ah!</h2>
+    <input type="text" v-model="msg">
+    <input type="button" v-model="msg">
+    <br><br>
+    <h1>List Students</h1>
+    <ul>
+      <li v-for="student in grayStudents">{{ student.name }} - {{ student.age }}</li>
+    </ul>
+    <br>
+    <h2>Male Students: </h2>
+    <ul>
+      <li v-for="student in maleStudents">{{student.name}}</li>
+    </ul>
+    <br>
+    <h1>Star Wars</h1>
+    <button type="button" name="button" v-on:click=getStarWars>Get Star Wars</button>
+    <ul>
+      <li v-for="hero in starWarsHero">{{hero.name}}</li>
+    </ul
+  </div>
+
+  <script type="text/javascript">
+
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isLogin: false,
+        msg: 'Hello gray!',
+        valueBtn: 'This is a button',
+        grayStudents: [
+          {name: 'zul', age: 25, gender: 'male'},
+          {name: 'ridho', age: 26, gender: 'male'},
+          {name: 'james', age: 17, gender: 'male'},
+          {name: 'uci', age: 22, gender: 'female'},
+          {name: 'popi', age: 25, gender: 'female'},
+          {name: 'shab', age: 27, gender: 'female'}
+        ],
+        starWarsHero: []
+      },
+      created: function () { //barangnya sudah ada tapi belum dipasang
+        this.getStarWars();
+      },
+      //mounted: { //barangnya sudah ada dan sudah dipasang
+      //},
+      computed: {
+        maleStudents: function () {
+          return this.grayStudents.filter(function(student) {
+            return student.gender == 'male'
+          })
+        }
+      },
+      methods: {
+        getStarWars: function() {
+          var self = this;
+          axios.get('http://swapi.co/api/people/')
+            .then (function (response) {
+              //console.log(response.data);
+              self.starWarsHero = response.data.results;
+            })
+            .catch (function (error) {
+              console.log(error);
+            })
+        }
+      }
+    })
+
+    //app.getStarWars()
+
+  </script>
+
+</body>
+
+</html
