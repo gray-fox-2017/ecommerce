@@ -16,6 +16,46 @@
   background-size: 160px 168px;
 }
 
+.cart button {
+  border: 0;
+  background: #FFDBE0;
+  transition: all .1s ease-out;
+  margin: 1em;
+}
+
+.fade-transition {
+  transition: all 0.2s ease-out;
+}
+
+.fade-enter, .fade-leave {
+  opacity: 0;
+}
+
+.btn-cart > div {
+  z-index: 100;
+  background: #fff;
+  padding: 20px 30px;
+  position: absolute;
+  right: 30px;
+  box-shadow: 2px 2px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.btn-cart > div div {
+  text-align: center;
+}
+
+.btn-cart ul, .btn-cart li, .btn-cart p {
+  margin-bottom: 0;
+}
+
+.btn-cart button {
+  margin: 20px 0 10px;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
 .browse {
   margin: 2em auto;
 }
@@ -25,7 +65,7 @@
 }
 
 .all {
-  margin: 1em 1em;
+  margin: 1em 0;
 }
 
 .footer {

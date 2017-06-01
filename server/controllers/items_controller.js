@@ -31,7 +31,8 @@ function createItem(req, res) {
     price:        req.body.price,
     category:     req.body.category,
     stock:        req.body.stock,
-    image:        req.body.image
+    image:        req.body.image,
+    quantity:     req.body.quantity
   }, function(err, result) {
     if (err) {
       res.send(err.message);
@@ -68,7 +69,8 @@ function updateItem(req, res) {
         price:        req.body.price || item[0].price,
         category:     req.body.category || item[0].category,
         stock:        req.body.stock || item[0].stock,
-        image:        req.body.image || item[0].image
+        image:        req.body.image || item[0].image,
+        quantity:     req.body.quantity || item[0].quantity
       }
     }, (err, result) => {
       if (err) return res.send(err.message)
