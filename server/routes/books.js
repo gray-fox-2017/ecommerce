@@ -5,6 +5,8 @@ var bookctrl = require('../controllers/bookctrl')
 
 router.get('/', bookctrl.get)
 
+router.get('/cat/:genre', bookctrl.getByGenre)
+
 router.post('/', bookctrl.create)
 
 router.get('/:id', bookctrl.getOne)

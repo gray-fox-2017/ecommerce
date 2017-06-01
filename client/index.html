@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/vue"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-url-parser/2.3.1/purl.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
   </head>
   <body>
@@ -21,7 +22,7 @@
           </div>
           <ul v-if="token.length > 0"class="nav navbar-nav navbar-right">
             <!-- <li hidden>Update</li> -->
-            <li class="active"><a href="#">Beranda</a></li>
+            <li class="active"><a href="./index.html">Beranda</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profil Anda <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -95,11 +96,12 @@
           <div class="col-md-2 sidebar">
             <h4>Kategori</h4>
             <ul class="list-group">
-              <li class="list-group-item"><a href="#">Fiksi</a></li>
-              <li class="list-group-item"><a href="#">Non-Fiksi</a></li>
-              <li class="list-group-item"><a href="#">Sejarah</a></li>
-              <li class="list-group-item"><a href="#">Biografi</a></li>
-              <li class="list-group-item"><a href="#">Pendidikan</a></li>
+              <li class="list-group-item"><a href="./index.html">All</a></li>
+              <li class="list-group-item"><a href="./index.html?genre=Fiksi">Fiksi</a></li>
+              <li class="list-group-item"><a href="./index.html?genre=Non-Fiksi">Non-Fiksi</a></li>
+              <li class="list-group-item"><a href="./index.html?genre=Sejarah">Sejarah</a></li>
+              <li class="list-group-item"><a href="./index.html?genre=Biografi">Biografi</a></li>
+              <li class="list-group-item"><a href="./index.html?genre=Pendidikan">Pendidikan</a></li>
             </ul>
             <a v-if="cart.length > 0" v-on:click="calculateTotal()" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">
             <span class="glyphicon glyphicon-shopping-cart"></span> Keranjang ({{ cart.length }})</a>
@@ -210,6 +212,7 @@
     </div>
     </div>
     <script type="text/javascript">
+      var genre = $.url().param('genre');
       var app = new Vue({
         el: '#app',
         data: {
@@ -225,10 +228,17 @@
         methods: {
           populateBook: function() {
             var self = this;
-            axios.get('http://localhost:3000/api/books')
-            .then((response) => {
-              self.bookList = response.data;
-            })
+            if(genre) {
+              axios.get(`http://localhost:3000/api/books/cat/${genre}`)
+              .then((response) => {
+                self.bookList = response.data;
+              })
+            } else {
+              axios.get('http://localhost:3000/api/books')
+              .then((response) => {
+                self.bookList = response.data;
+              })
+            }
           },
           addToCart: function(item) {
             let data = app.cart;

@@ -44,7 +44,7 @@
       </header>
       <div class="container">
         <div class="row">
-          <div class="col-xs-12 col-md-offset-3 col-md-6">
+          <div v-if="token.length > 1" class="col-xs-12 col-md-offset-3 col-md-6">
             <h3>Riwayat Transaksi {{ translist[0].customer.name }}</h3>
             <ul class="list-group">
               <li class="list-group-item" v-for="trans in translist">
@@ -58,6 +58,9 @@
                 </div>
               </li>
             </ul>
+          </div>
+          <div v-else class="col-xs-12 col-md-offset-3 col-md-6">
+            <h3>Silakan login terlebih dahulu</h3>
           </div>
         </div>
       </div>
@@ -86,28 +89,9 @@
       })
       $(document).ready(function() {
         $('#logout').click(function(event) {
+          console.log('tes')
           localStorage.removeItem("token");
-          localStorage.removeItem("cart");
-          window.location.href = "./index.html";
-        })
-        $('#beli').click(function() {
-          if(window.confirm("Selesai belanja dan lanjut ke pembayaran?")) {
-            var token = localStorage.getItem("token");
-            var cart = localStorage.getItem("cart");
-            var total = app.total;
-            axios.post('http://localhost:3000/api/transactions/checkout', {
-              token: token,
-              cart: cart,
-              total: total
-            })
-            .then(function (response) {
-              localStorage.setItem("cart", []);
-              window.location.href = "./index.html";
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-          }
+          window.location.href = "./index.html";s
         })
       })
     </script>

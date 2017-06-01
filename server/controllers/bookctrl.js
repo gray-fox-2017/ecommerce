@@ -32,6 +32,12 @@ var getOne = function(req, res) {
   })
 }
 
+var getByGenre = function(req, res) {
+  Book.find({genre: req.params.genre}, (err, book) => {
+    res.send(err ? err: book)
+  })
+}
+
 var update = function(req, res) {
   Book.findByIdAndUpdate(req.params.id, { $set: req.body }, { runValidators: true }, (err, book) => {
     if(err) res.send(err.errors)
@@ -61,5 +67,5 @@ var remove = function(req, res) {
 }
 
 module.exports = {
-  create, get, getOne, update, purchased, remove
+  create, get, getOne,getByGenre, update, purchased, remove
 };
