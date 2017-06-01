@@ -6,7 +6,7 @@
 }
 
 .modal-cart {
-  
+
 }
 
 .item {
@@ -24,6 +24,7 @@
 
 .image-buku {
   height: 240px;
+  padding: 5px;
 }
 
 .image-buku > img {
@@ -38,4 +39,20 @@
 .book-author {
   font-style: italic;
   font-weight: 500;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.image-container {
+  height: 160px;
+  padding: 5px;
+}
+
+.image-container > img {
+  margin: auto;
+  height: 100%;
 }
