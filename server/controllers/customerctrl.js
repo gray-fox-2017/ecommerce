@@ -9,7 +9,7 @@ var create = function(req, res) {
     name: req.body.name,
     username: req.body.username,
     password: hash,
-    role: 'user'
+    role: req.body.role
   })
   newCust.save((err, createdUser) => {
     res.send(err ? err : createdUser);

@@ -9,6 +9,7 @@ var bookSchema = mongoose.Schema({
     author: String,
     genre: String,
     price: Number,
+    stock: Number,
     image: String
 });
 

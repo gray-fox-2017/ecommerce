@@ -19,7 +19,8 @@
           <div class="navbar-header">
             <a class="navbar-brand" href="#">Buku Lapuk</a>
           </div>
-          <ul class="nav navbar-nav navbar-right">
+          <ul v-if="token.length > 0"class="nav navbar-nav navbar-right">
+            <!-- <li hidden>Update</li> -->
             <li class="active"><a href="#">Beranda</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profil Anda <span class="caret"></span></a>
@@ -30,7 +31,12 @@
                 <li><a href="#">Ubah Pengaturan Profil</a></li>
               </ul>
             </li>
-            <li><a href="checkout.html">Keranjang</a></li>
+            <li><a href="#">Kontak</a></li>
+            <li><a id="logout" href="#">Logout</a></li>
+          </ul>
+          <ul v-else class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#">Beranda</a></li>
+            <li><a href="registration.html">Daftar | Login</a></li>
             <li><a href="#">Kontak</a></li>
           </ul>
         </div>
@@ -59,140 +65,140 @@
           </div>
         </div>
         <div class="col-xs-12 col-md-6">
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
-          <ol class="carousel-indicators">
-            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-            <li data-target="#myCarousel" data-slide-to="1"></li>
-          </ol>
-          <div class="carousel-inner">
-            <div class="item active">
-              <img class="img-responsive"src="./images/banner1.jpg" alt="Promo Ongkir">
-            </div>
+          <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+              <li data-target="#myCarousel" data-slide-to="1"></li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="item active">
+                <img class="img-responsive"src="./images/banner1.jpg" alt="Promo Ongkir">
+              </div>
 
-            <div class="item">
-              <img class="img-responsive"src="./images/banner2.jpg" alt="Chicago">
+              <div class="item">
+                <img class="img-responsive"src="./images/banner2.jpg" alt="Chicago">
+              </div>
+              <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Sebelumnya</span>
+              </a>
+              <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Selanjutnya</span>
+              </a>
             </div>
-            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-              <span class="glyphicon glyphicon-chevron-left"></span>
-              <span class="sr-only">Sebelumnya</span>
-            </a>
-            <a class="right carousel-control" href="#myCarousel" data-slide="next">
-              <span class="glyphicon glyphicon-chevron-right"></span>
-              <span class="sr-only">Selanjutnya</span>
-            </a>
-          </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="container isinya">
-      <div class="row">
-        <div class="col-md-2 sidebar">
-          <h4>Kategori</h4>
-          <ul class="list-group">
-            <li class="list-group-item"><a href="#">Fiksi</a></li>
-            <li class="list-group-item"><a href="#">Non-Fiksi</a></li>
-            <li class="list-group-item"><a href="#">Sejarah</a></li>
-            <li class="list-group-item"><a href="#">Biografi</a></li>
-            <li class="list-group-item"><a href="#">Pendidikan</a></li>
-          </ul>
-          <button v-if="cart.length > 0" v-on:click="calculateTotal()" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">
-          <span class="glyphicon glyphicon-shopping-cart"></span> Keranjang ({{ cart.length }})
-          </button>
-            <!-- Modal -->
-            <div id="myModal" class="modal fade" role="dialog">
-              <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="panel panel-default">
-              				<div class="panel-heading">
-              					<div class="panel-title">
-              						<div class="row">
-              							<div class="col-xs-6">
-              								<h4>Keranjang Belanja Anda</h4>
-              							</div>
-              						</div>
-              					</div>
-              				</div>
-              				<div class="panel-body">
-              					<div class="row" v-for="(belanjaan, index) in cart">
-              						<div class="col-xs-2"><img class="img-responsive" v-bind:src="belanjaan.image">
-              						</div>
-              						<div class="col-xs-4">
-              							<p class="book-name">{{ belanjaan.title }}</p>
-                            <p class="book-genre"><small>{{ belanjaan.genre }}</small></p>
-              						</div>
-              						<div class="col-xs-6">
-              							<div class="col-xs-6 text-right">
-              								<p class="book-price"><strong>Rp {{ belanjaan.price }}<span class="text-muted"> x</span></strong></p>
-              							</div>
-              							<div class="col-xs-4">
-              								<input type="text" class="form-control input-sm" v-model="belanjaan.count">
-              							</div>
-              							<div class="col-xs-2">
-              								<button type="button" class="btn btn-link btn-xs" v-on:click="removeItem(index)">
-              									<span class="glyphicon glyphicon-trash"> </span>
-              								</button>
-              							</div>
-              						</div>
-              					</div>
-              					<hr>
-              					<hr>
-              					<div class="row">
-              						<div class="text-center">
-              							<div class="col-xs-9">
-              								<h6 class="text-right">Tambah barang?</h6>
-              							</div>
-              							<div class="col-xs-3">
-              								<button type="button" v-on:click="calculateTotal()" class="btn btn-default btn-sm btn-block">
-              									Update
-              								</button>
-              							</div>
-              						</div>
-              					</div>
-              				</div>
-              				<div class="panel-footer">
-              					<div class="row text-center">
-              						<div class="col-xs-9">
-              							<h4 class="text-right">Total <strong>Rp {{ total }}</strong></h4>
-              						</div>
-              						<div class="col-xs-3">
-              							<button type="button" class="btn btn-success btn-block">
-              								Checkout
-              							</button>
-              						</div>
-              					</div>
-              				</div>
-              			</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>
-        <div class="col-md-offset-1 col-md-9">
-          <h4>Rekomendasi Buku</h4>
-          <div class="row">
-              <div class="col-md-4" v-for="book in bookList">
-                <div class="panel panel-default">
-                  <div class="panel-heading">
-                    <div class="image-buku">
-                      <img v-bind:src="book.image" class="img-responsive img-rounded" alt="">
+      <div class="container isinya">
+        <div class="row">
+          <div class="col-md-2 sidebar">
+            <h4>Kategori</h4>
+            <ul class="list-group">
+              <li class="list-group-item"><a href="#">Fiksi</a></li>
+              <li class="list-group-item"><a href="#">Non-Fiksi</a></li>
+              <li class="list-group-item"><a href="#">Sejarah</a></li>
+              <li class="list-group-item"><a href="#">Biografi</a></li>
+              <li class="list-group-item"><a href="#">Pendidikan</a></li>
+            </ul>
+            <a v-if="cart.length > 0" v-on:click="calculateTotal()" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">
+            <span class="glyphicon glyphicon-shopping-cart"></span> Keranjang ({{ cart.length }})</a>
+              <div id="myModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <div class="panel-title">
+                            <div class="row">
+                              <div class="col-xs-6">
+                                <h4>Keranjang Belanja Anda</h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel-body">
+                          <div class="row" v-for="(belanjaan, index) in cart">
+                            <div class="col-xs-2"><img class="img-responsive" v-bind:src="belanjaan.image">
+                            </div>
+                            <div class="col-xs-4">
+                              <p class="book-name">{{ belanjaan.title }}</p>
+                              <p class="book-genre"><small>{{ belanjaan.genre }}</small></p>
+                            </div>
+                            <div class="col-xs-6">
+                              <div class="col-xs-6 text-right">
+                                <p class="book-price"><strong>Rp {{ belanjaan.price }}<span class="text-muted"> x</span></strong></p>
+                              </div>
+                              <div class="col-xs-4">
+                                <input type="text" class="form-control input-sm" v-model="belanjaan.count" v-bind:max="belanjaan.stock">
+                              </div>
+                              <div class="col-xs-2">
+                                <button type="button" class="btn btn-link btn-xs" v-on:click="removeItem(belanjaan, index)">
+                                  <span class="glyphicon glyphicon-trash"> </span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <hr>
+                          <hr>
+                          <div class="row">
+                            <div class="text-center">
+                              <div class="col-xs-9">
+                                <h6 class="text-right">Tambah barang?</h6>
+                              </div>
+                              <div class="col-xs-3">
+                                <button type="button" v-on:click="calculateTotal()" class="btn btn-default btn-sm btn-block">
+                                  Update
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel-footer">
+                          <div class="row text-center">
+                            <div class="col-xs-9">
+                              <h4 class="text-right">Total <strong>Rp {{ total }}</strong></h4>
+                            </div>
+                            <div class="col-xs-3">
+                              <button id="beli" type="button" class="btn btn-success btn-block">
+                                Checkout
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="panel-body">
-                    <h5 class="book-name">{{ book.title }}</h5>
-                    <p class="book-author">Penulis: {{ book.author }}</p>
-                    <p class="book-price">Rp {{ book.price }}</p>
-                    <p class="book-genre">Genre: {{ book.genre }}</p>
-                    <button type="button" name="add-item" class="btn btn-default" v-on:click="addToCart(book)">Tambahkan</button>
-                  </div>
                 </div>
               </div>
+          </div>
+          <div class="col-md-offset-1 col-md-9">
+            <h4>Rekomendasi Buku</h4>
+            <div class="row">
+                <div class="col-md-4" v-for="book in bookList">
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <div class="image-buku">
+                        <img v-bind:src="book.image" class="img-responsive img-rounded" alt="">
+                      </div>
+                    </div>
+                    <div class="panel-body">
+                      <h5 class="book-name">{{ book.title }}</h5>
+                      <p class="book-author">Penulis: {{ book.author }}</p>
+                      <p class="book-price">Rp {{ book.price }}</p>
+                      <p class="book-genre">Genre: {{ book.genre }}</p>
+                      <div v-if="token.length > 0">
+                        <button v-if="book.stock > 0" type="button" name="add-item" class="btn btn-default" v-on:click="addToCart(book)">Tambahkan</button>
+                        <button v-else-if="book.stock == 0" type="button" class="btn btn-danger disabled">Stok Habis</button>
+                      </div>
+                      <button v-else type="button" class="btn btn-primary">Login Dulu</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
           </div>
         </div>
       </div>
@@ -203,11 +209,13 @@
         el: '#app',
         data: {
           bookList: [],
-          cart: [],
-          total: 0
+          cart: localStorage.getItem("cart") || [],
+          total: 0,
+          token: localStorage.getItem("token") || ''
         },
         created: function() {
           this.populateBook();
+          this.cart = JSON.parse(this.cart)
         },
         methods: {
           populateBook: function() {
@@ -218,15 +226,26 @@
             })
           },
           addToCart: function(item) {
-            let data = this.cart;
+            let data = app.cart;
             let already = 0;
-            if(!item.count) item.count = 1;
-            for(let i = 0; i < data.length; i++) {
-              if(data[i] == item) {
-                already++;
+            if(item.stock > 0) {
+              for(let i = 0; i < data.length; i++) {
+                if(data[i]._id == item._id) {
+                  already++;
+                  var idx = i;
+                }
+              }
+              if(already == 0) {
+                item.count = 1;
+                item.stock--;
+                data.push(item);
+              } else {
+                item.count = data[idx].count + 1;
+                item.stock = data[idx].stock -1;
+                data[idx] = item;
               }
             }
-            if(already === 0) data.push(item)
+            localStorage.setItem("cart", JSON.stringify(data))
           },
           calculateTotal: function() {
             let total = 0;
@@ -234,11 +253,41 @@
               total += (belanjaan.count * belanjaan.price);
             })
             app.total = total;
+            localStorage.setItem("cart", JSON.stringify(app.cart))
           },
-          removeItem: function(index) {
+          removeItem: function(item, index) {
+            item.stock = item.count;
+            item.count = 0;
             app.cart.splice(index, 1)
+            localStorage.setItem("cart", JSON.stringify(app.cart))
           }
         }
+      })
+      $(document).ready(function() {
+        $('#logout').click(function(event) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("cart");
+          window.location.href = "./index.html";
+        })
+        $('#beli').click(function() {
+          if(window.confirm("Selesai belanja dan lanjut ke pembayaran?")) {
+            var token = localStorage.getItem("token");
+            var cart = localStorage.getItem("cart");
+            var total = app.total;
+            axios.post('http://localhost:3000/api/transactions/checkout', {
+              token: token,
+              cart: cart,
+              total: total
+            })
+            .then(function (response) {
+              localStorage.setItem("cart", []);
+              window.location.href = "./index.html";
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          }
+        })
       })
     </script>
   </body>
