@@ -24,6 +24,14 @@ var getOne = function(req, res) {
   })
 }
 
+var getPopulated = function(req, res) {
+  Transaction.find({customer: req.body.customer})
+  .populate('customer booklist')
+  .exec(function(err, trans) {
+    res.send(err ? err: trans)
+  })
+}
+
 var update = function(req, res) {
   Transaction.findByIdAndUpdate(req.params.id, { $set: req.body }, { runValidators: true }, (err, trans) => {
     res.send(err ? err: trans)
@@ -37,5 +45,5 @@ var remove = function(req, res) {
 }
 
 module.exports = {
-  create, get, getOne, update, remove
+  create, get, getOne, getPopulated, update, remove
 };

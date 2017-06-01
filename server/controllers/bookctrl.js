@@ -12,6 +12,7 @@ var create = function(req, res) {
     author: req.body.author,
     genre: req.body.genre,
     price: req.body.price,
+    stock: req.body.stock,
     image: image
   })
   newBook.save((err, createdBook) => {
@@ -38,6 +39,20 @@ var update = function(req, res) {
   })
 }
 
+var purchased = function(req, res, next) {
+  var books = req.body.rawBook;
+  books.forEach(book => {
+    Book.findOne({_id: book._id}, (err, found) => {
+      if(err) res.send(err)
+      found.stock -= book.count;
+      found.save(function(err, updated) {
+        if(err) res.send(err)
+      })
+    })
+  })
+  next()
+}
+
 var remove = function(req, res) {
   Book.findOneAndRemove({_id: req.params.id}, (err, book) => {
     if(err) res.send(err)
@@ -46,5 +61,5 @@ var remove = function(req, res) {
 }
 
 module.exports = {
-  create, get, getOne, update, remove
+  create, get, getOne, update, purchased, remove
 };

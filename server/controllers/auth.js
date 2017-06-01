@@ -70,11 +70,12 @@ var authCustomer = function(req, res, next) {
 }
 
 var allCustomer = function(req, res, next) {
-  let token = req.body.token
+  let token = req.body.token || req.headers.token
 
   if(token) {
     jwt.verify(token, sec, (err, decoded) => {
       if(decoded) {
+        req.body.customer = decoded.id;
         next()
       } else {
         res.send('Route only for authorized customer only')
@@ -94,11 +95,14 @@ var checkout = function(req, res, next) {
     jwt.verify(token, sec, (err, decoded) => {
       if(decoded) {
         var booklist = [];
+        var rawBook = [];
         cart.forEach(item => {
           booklist.push(item._id);
+          rawBook.push(item)
         })
         var customer = decoded.id;
 
+        req.body.rawBook = rawBook;
         req.body.booklist = booklist;
         req.body.customer = customer;
         req.body.total = total;
