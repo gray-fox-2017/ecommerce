@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/stylesheets/footer.css">
 
     <!-- Latest compiled and minified CSS -->
+    <script src="https://unpkg.com/vue"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -14,255 +16,141 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/vue"></script>
   </head>
   <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
+    <div id="app">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
 
-          <a class="navbar-brand" href="#">Erler-Store</a>
+            <a class="navbar-brand" href="#">Erler-Store</a>
 
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
-
-          <ul class="nav navbar-nav navbar-right">
-            <li data-toggle="modal" data-target="#myModal"><a><span class="glyphicon glyphicon-shopping-cart" style="margin-right: 10px"></span>&nbsp;Cart</a></li>
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" v-for= "cart in carts">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-                  </div>
-                  <div class="modal-body" >
-                    <h1>{{  cart }}</h1>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            <li><a href="login.html">Login</a></li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-    <!-- header -->
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12" >
-          <div class="jumbotron" style="background-image:url(https://s-media-cache-ak0.pinimg.com/originals/03/b1/bc/03b1bc055c77b932865e7f19b2f414a2.jpg)">
-            <div class="text-color">
-              <h1>Welcome to Flower Shop</h1>
-              <p>we have anything about flower here</p>
-            </div>
           </div>
 
-        </div>
-      </div>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-    </div>
-    <!-- end of header -->
-    <!-- main-content -->
-    <div id="app">
+
+            <ul class="nav navbar-nav navbar-right">
+              <!-- <li data-toggle="modal" data-target="#myModal"><a><span class="glyphicon glyphicon-shopping-cart" style="margin-right: 10px"></span>&nbsp;Cart</a></li> -->
+              <!-- <li data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-shopping-cart" style="margin-right: 10px"></span>&nbsp;Cart</li> -->
+              <!-- Trigger the modal with a button -->
+                <!-- <button type="button" class="btn" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-shopping-cart"></span>Cart</button> -->
+                <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-shopping-cart"></span>Cart</a></li>
+                <li><a href="login.html">Login</a></li>
+                <!-- Modal -->
+                <div id="myModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div class="modal-body">
+                          <table class="table">
+                            <tr>
+                              <th>Gambar</th>
+                              <th>Nama</th>
+                              <th>Harga</th>
+                              <th>Kuantitas</th>
+                              <th>Total</th>
+                            </tr>
+                            <tr v-for="item in cart">
+                              <input type="hidden" name="" v-model:value="item.count">
+                              <td><img class="img-in-table" v-bind:src="item.image"   alt=""></td>
+                              <td>{{ item.name }}</td>
+                              <td>{{ item.price }}</td>
+                              <td><input v-on:keyup="calculate()" v-model="item.count" v-bind:max="item.stock" type="text" ></td>
+                              <td>{{ countSubTotal(item.count, item.price) }}</td>
+                            </tr>
+
+                          </table>
+
+                      </div>
+                      <div class="modal-footer">
+                        <p><b> GRAND TOTAL : {{ total }}</b></p>
+                        <!-- <button type="button" v-on:click="calculate()">Update</button> -->
+                        <button v-on:click="checkout" type="button" class="btn btn-default" data-dismiss="modal">Checkout</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- end of modal -->
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+      <!-- header -->
       <div class="container">
         <div class="row">
-        	<div class="col-md-12">
-            <div class="row">
-
-              <!-- <div class="col-sm-6 col-md-4">
-
-                <div class="thumbnail" >
-                  <h4 class="text-center"><span class="label label-info" v-for="item in getItem">{{ item.category }}</span></h4>
-                  <img src="https://static.pexels.com/photos/87452/flowers-background-butterflies-beautiful-87452.jpeg" class="img-responsive">
-                  <div class="caption">
-                    <div class="row">
-                      <div class="col-md-6 col-xs-6">
-                        <h3 v-for="item in getItem">{{ item.name }}</h3>
-                      </div>
-                      <div class="col-md-6 col-xs-6 price">
-                        <h3>
-                        <label>$2.99</label></h3>
-                      </div>
-                    </div>
-                    <p>Yellowssom Flower Awesome For Your Girl/Boy-Firends</p>
-                    <div class="row">
-                      <div class="col-md-3">
-                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
-                      </div>
-                      <div class="col-md-6">
-                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
-                    </div>
-
-                    <p> </p>
-                  </div>
-                </div>
-
-              </div> -->
-
-              <div class="col-sm-6 col-md-4" v-for= "item in items">
-                <div class="thumbnail" >
-                  <h4 class="text-center"><span class="label label-info">{{ item.category }}</span></h4>
-                  <img v-bind:src="item.image" class="img-responsive">
-                  <div class="caption">
-                    <div class="row">
-                      <div class="col-md-6 col-xs-6">
-                        <h3>{{ item.name }}</h3>
-                      </div>
-                      <div class="col-md-6 col-xs-6 price">
-                        <h3>
-                        <label>Rp. {{ item.price }}</label></h3>
-                      </div>
-                    </div>
-                    <p>{{ item.description }}</p>
-                    <div class="row">
-                      <div class="col-md-3">
-                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
-                      </div>
-                      <div class="col-md-6">
-                        <button type="button" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart" v-on:click="addToCart(item)"></span> Buy</div></button>
-                        <!-- <a class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart" v-on:click="addToCart(item)"></span> Buy</a></div> -->
-                    </div>
-
-                    <p> </p>
-                  </div>
-                </div>
+          <div class="col-md-12" >
+            <div class="jumbotron" style="background-image:url(https://s-media-cache-ak0.pinimg.com/originals/03/b1/bc/03b1bc055c77b932865e7f19b2f414a2.jpg)">
+              <div class="text-color">
+                <h1>Welcome to Flower Shop</h1>
+                <p>we have anything about flower here</p>
               </div>
-
-              <!-- <div class="col-sm-6 col-md-4">
-                <div class="thumbnail" >
-                  <h4 class="text-center"><span class="label label-info">Pink Flower</span></h4>
-                  <img src="https://static.pexels.com/photos/27714/pexels-photo-27714.jpg" class="img-responsive">
-                  <div class="caption">
-                    <div class="row">
-                      <div class="col-md-6 col-xs-6">
-                        <h3>Lumiasoom</h3>
-                      </div>
-                      <div class="col-md-6 col-xs-6 price">
-                        <h3>
-                        <label>$4.00</label></h3>
-                      </div>
-                    </div>
-                    <p>Lumiasoom Flower Awesome For Your Girl/Boy-Friends</p>
-                    <div class="row">
-                      <div class="col-md-3">
-                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
-                      </div>
-                      <div class="col-md-6">
-                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
-                    </div>
-
-                    <p> </p>
-                  </div>
-                </div>
-               </div>
-
-               <div class="col-sm-6 col-md-4">
-                <div class="thumbnail" >
-                  <h4 class="text-center"><span class="label label-info">Samsung Flower</span></h4>
-                  <img src="/image/pink4.jpg" class="img-responsive">
-                  <div class="caption">
-                    <div class="row">
-                      <div class="col-md-6 col-xs-6">
-                        <h3>Yellowssom</h3>
-                      </div>
-                      <div class="col-md-6 col-xs-6 price">
-                        <h3>
-                        <label>$2.99</label></h3>
-                      </div>
-                    </div>
-                    <p>Yellowssom Flower Awesome For Your Girl/Boy-Firends</p>
-                    <div class="row">
-                      <div class="col-md-3">
-                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
-                      </div>
-                      <div class="col-md-6">
-                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
-                    </div>
-
-                    <p> </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-sm-6 col-md-4">
-                <div class="thumbnail" >
-                  <h4 class="text-center"><span class="label label-info">Samsung Flower</span></h4>
-                  <img src="/image/sun.jpg" class="img-responsive">
-                  <div class="caption">
-                    <div class="row">
-                      <div class="col-md-6 col-xs-6">
-                        <h3>Yellowssom</h3>
-                      </div>
-                      <div class="col-md-6 col-xs-6 price">
-                        <h3>
-                        <label>$2.99</label></h3>
-                      </div>
-                    </div>
-                    <p>Yellowssom Flower Awesome For Your Girl/Boy-Firends</p>
-                    <div class="row">
-                      <div class="col-md-3">
-                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
-                      </div>
-                      <div class="col-md-6">
-                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
-                    </div>
-
-                    <p> </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-sm-6 col-md-4">
-                <div class="thumbnail" >
-                  <h4 class="text-center"><span class="label label-info">Samsung Flower</span></h4>
-                  <img src="/image/pinkball.jpg" class="img-responsive">
-                  <div class="caption">
-                    <div class="row">
-                      <div class="col-md-6 col-xs-6">
-                        <h3>Yellowssom</h3>
-                      </div>
-                      <div class="col-md-6 col-xs-6 price">
-                        <h3>
-                        <label>$2.99</label></h3>
-                      </div>
-                    </div>
-                    <p>Yellowssom Flower Awesome For Your Girl/Boy-Firends</p>
-                    <div class="row">
-                      <div class="col-md-3">
-                        <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
-                      </div>
-                      <div class="col-md-6">
-                        <a href="#" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart"></span> Buy</a></div>
-                    </div>
-
-                    <p> </p>
-                  </div>
-                </div>
-              </div> -->
-
             </div>
 
           </div>
+        </div>
 
-      	</div>
       </div>
-    </div>
+      <!-- end of header -->
+
+      <!-- main-content -->
+      <div class="container">
+          <div class="row">
+          	<div class="col-md-12">
+              <div class="row">
+
+                <div class="col-sm-6 col-md-4" v-for= "item in items">
+                  <div class="thumbnail" v-if="item.stock > 0">
+                    <h4 class="text-center"><span class="label label-info">{{ item.category }}</span></h4>
+                    <img v-bind:src="item.image" class="img-responsive">
+                    <div class="caption">
+                      <div class="row">
+                        <div class="col-md-6 col-xs-6">
+                          <h3>{{ item.name }}</h3>
+                        </div>
+                        <div class="col-md-6 col-xs-6 price">
+                          <h3>
+                          <label>Rp. {{ item.price }}</label></h3>
+                        </div>
+                      </div>
+                      <p>{{ item.description }}</p>
+                      <div class="row">
+                        <!-- <div class="col-md-3">
+                          <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                        </div> -->
+                        <div class="col-md-12">
+                          <!-- <button type="button" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart" v-on:click="addToCart(item)"></span> Buy</div></button> -->
+                          <!-- <div class="col-md-1">  -->
+                          <a class="btn btn-success" role="button" v-on:click="addToCart(item)">Beli</a>
+                        </div>
+                          <!-- <a class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart" v-on:click="addToCart(item)"></span> Buy</a></div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div v-else="">
+                    <!-- <p>item not found</p> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+        	</div>
+        </div>
 
     <!-- end of main-content -->
 
     <!-- main-categor -->
-    <div class="container">
+      <div class="container">
       <div class="col-md-12" style="padding:0">
         <ul class="list-group" style="margin-bottom:0">
          <li class="list-group-item text-center" style="background-color:#21313F"><b>Category</b></li>
@@ -293,15 +181,19 @@
       </div>
 
     </div>
+    </div>
     <script type="text/javascript">
       var app = new Vue ({
         el: '#app',
+        jml:0,
         data: {
           items: [],
-          carts: []
+          cart: [],
+          total:0
         },
         created: function() {
           this.getItem()
+          // this.items.push({jml:0})
         },
         methods: {
           getItem: function() {
@@ -316,13 +208,84 @@
             });
           },
           addToCart: function(item) {
-             var data = this.carts
-             var kerangjang = []
-             kerangjang.push(data)
-             this.carts = kerangjang;
-             console.log("------------------>>>>",data);
-            console.log('===================>>>  ',this.carts);
+            var cart = this.cart
+            // var index = cart.findIndex(value => value._id == item._id)
+            // var index = 0
+            let data = 0
+            if(item.stock > 0) {
+              for (let i = 0; i < cart.length; i++) {
+                if(cart[i]._id == item._id) {
+                  data++
+                  var index = i
+                }
+              }
+            }
+            if (data == 0) {
+              item.count = 1;
+              item.stock--;
+              cart.push(item);
+            } else {
+              cart[index].count++;
+              cart[index].stock--;
+              cart[index] = item;
+            }
+
+            console.log(cart);
+          },
+          countSubTotal: function(price, count) {
+            return price * count
+          },
+          calculate: function() {
+            var total=0
+            this.cart.forEach(item => {
+              total += (item.count * item.price)
+              console.log('ini teksnya dibawah');
+              console.log(total);
+            })
+            app.total = total
+
+          },
+          removeCart: function(item, index) {
+            item.stock += item.count;
+            item.count = 0
+            this.cart.splice(index, 1)
+          },
+          checkout: function() {
+            var itemlist = this.cart
+            axios.post('http://localhost:3000/api/transactions', {
+              // this.memberid //not yet
+              // self.cart
+              itemlist
+            })
+            // .then(response => {
+            //   // var response
+            //   console.log(response);
+            //   let _id = response.data._id
+            //   let tes = response.config.data //get data itemlist in object of array
+            //   axios.get('http://localhost:3000/api/items/'+_id+'')
+            //   .then(data => {
+            //     var getStock = data.stock
+            //     // var newStock = getStock - item.count
+            //     // console.log('stock baru ',newStock);
+            //     console.log('----pemisah=----');
+            //     console.log(data);
+            //     console.log(data.stock);
+            //   })
+            //   .catch(error => {
+            //     console.log(error);
+            //   })
+            //   // axios.put('localhost:3000/api/items/+'id+'',data,config{
+            //   //
+            //   // })
+            //   window.alert('terimakasih telah membeli bunga dari kami!')
+            //   // this.removeCart()
+            // })
+            .catch(error => {
+              console.log('err', error);
+            })
+
           }
+
         }
       })
     </script>
