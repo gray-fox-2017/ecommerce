@@ -38,7 +38,8 @@
               <!-- Trigger the modal with a button -->
                 <!-- <button type="button" class="btn" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-shopping-cart"></span>Cart</button> -->
                 <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-shopping-cart"></span>Cart</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li v-if="token !== null"><a @click="logOut">Logout</a></li>
+                <li v-else="token == null"><a href="login.html">Login</a></li>
                 <!-- Modal -->
                 <div id="myModal" class="modal fade" role="dialog">
                   <div class="modal-dialog">
@@ -189,16 +190,21 @@
         data: {
           items: [],
           cart: [],
-          total:0
+          total:0,
+          token: localStorage.getItem("token")
         },
         created: function() {
           this.getItem()
           // this.items.push({jml:0})
         },
         methods: {
+          logOut() {
+            window.localStorage.removeItem('token')
+            window.location.href = "/"
+          },
           getItem: function() {
             var self = this;
-            axios.get('http://localhost:3000/api/items')
+            axios.get('http://localhost:3000/api/items', { headers: {'token':localStorage.getItem('token')}})
             .then(function (response) {
               console.log(JSON.stringify(response.data));
               self.items = response.data
@@ -250,41 +256,42 @@
             item.count = 0
             this.cart.splice(index, 1)
           },
+          updateStok: function() {
+            var itemlist = this.cart
+
+            axios.put('http://localhost:3000/api/items', { itemlist }, { headers: {'token':localStorage.getItem('token')}})
+            .then((result) => {
+              console.log(result.data)
+              console.log(result)
+            })
+            .catch(err => {
+              console.log(err);
+            })
+          },
           checkout: function() {
             var itemlist = this.cart
-            axios.post('http://localhost:3000/api/transactions', {
-              // this.memberid //not yet
-              // self.cart
-              itemlist
+            var self = this
+            axios.post('http://localhost:3000/api/transactions',{ itemlist }, { headers: {'token':localStorage.getItem('token')}})
+            .then((response) => {
+              window.alert('terimakasih telah membeli bunga dari kami!')
+              // self.updateStok()
+              console.log('ini yg mau diubahhh',itemlist);
+              axios.put('http://localhost:3000/api/items/'+itemlist[0]._id+'', itemlist[0], { headers: {'token':localStorage.getItem('token')}})
+              .then((result) => {
+                console.log(result.data)
+                console.log(result)
+              })
+              .catch(err => {
+                console.log(err);
+              })
             })
-            // .then(response => {
-            //   // var response
-            //   console.log(response);
-            //   let _id = response.data._id
-            //   let tes = response.config.data //get data itemlist in object of array
-            //   axios.get('http://localhost:3000/api/items/'+_id+'')
-            //   .then(data => {
-            //     var getStock = data.stock
-            //     // var newStock = getStock - item.count
-            //     // console.log('stock baru ',newStock);
-            //     console.log('----pemisah=----');
-            //     console.log(data);
-            //     console.log(data.stock);
-            //   })
-            //   .catch(error => {
-            //     console.log(error);
-            //   })
-            //   // axios.put('localhost:3000/api/items/+'id+'',data,config{
-            //   //
-            //   // })
-            //   window.alert('terimakasih telah membeli bunga dari kami!')
-            //   // this.removeCart()
-            // })
-            .catch(error => {
+            .catch((error) => {
               console.log('err', error);
             })
 
+
           }
+
 
         }
       })
