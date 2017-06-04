@@ -1,5 +1,30 @@
+require('dotenv').config();
 const Customers = require('../models/customers_model');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const secret = process.env.SECRET_KEY;
+
+function login(req, res){
+  console.log(req.body.username);
+  console.log(req.body.password);
+  Customers.findOne({username : req.body.username}, function(err, user){
+    if(err){
+      res.json({err})
+    } else {
+      if(!user){
+        res.send('/');
+      }
+      else if(bcrypt.compareSync(req.body.password, user.password)){
+        let token = jwt.sign({username: user.username, role: user.role, memberid: user._id}, secret, {expiresIn:'1h'})
+        console.log('success');
+        res.send(token);
+      } else {
+        console.log('failed');
+        res.send('/');
+      }
+    }
+  })
+}
 
 function getAll(req, res) {
   Customers.find({}, function(err, result) {
@@ -93,5 +118,5 @@ function updateCustomer(req, res) {
 }
 
 module.exports = {
-  getAll, getSingle, createCustomer, deleteCustomer, updateCustomer
+  login, getAll, getSingle, createCustomer, deleteCustomer, updateCustomer
 }
