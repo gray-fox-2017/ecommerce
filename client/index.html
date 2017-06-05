@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Ecommers</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.2/semantic.min.css">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
+    <script type="text/javascript" src=" https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="ui fluid container">
+        <nav>
+          <div class="ui large pointing compact top fixed menu">
+            <div class="item">
+              <i class="shirtsinbulk icon"></i>
+              Safe Pocket
+            </div>
+            <div class="item">
+              <div class="ui transparent icon input">
+                <input type="text" name="search" placeholder="Search...">
+                <i class="search link icon"></i>
+              </div>
+            </div>
+            <div class="right menu">
+              <a :href='home' class="item"><i class="home icon"></i>Home</a>
+              <a :href="signin" class="item"><i class="sign in icon"></i>Sign In</a>
+              <a :href="signup" class="item"><i class="add user icon"></i>Sign Up</a>
+              <a :href="cart" class="item"><div class="ui primary button">
+                <i class="shopping bag icon"></i>{{ count }} Carts
+              </div></a>
+            </div>
+          </div>
+          <div class="ui inverted bottom fixed menu">
+            <div class="right menu">
+              <a class="item"><i class="facebook icon"></i>Facebook</a>
+              <a class="item"><i class="twitter icon"></i> Twitter</a>
+              <a class="item"><i class="github icon"></i>Git Hub</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <main style="padding-top:70px; padding-left:30px;">
+        <div class="ui fluid container">
+          <div class="ui special link cards">
+            <div class="card">
+              <div class="blurring dimmable image">
+                <div class="ui dimmer">
+                  <div class="content">
+                    <div class="center">
+                      <div v-on:click="getCartCount" class="ui inverted button"><i class="add to cart icon"></i>Add to Cart</div>
+                    </div>
+                  </div>
+                </div>
+                <img src="https://i1.wp.com/anginmammiri.com/wp-content/uploads/2016/12/avanza-300x192.jpg?ssl=1">
+              </div>
+              <div class="content">
+                <a class="header">Avanza</a>
+                <div class="meta">
+                  <span class="date">Added on Sep 2014</span>
+                </div>
+              </div>
+              <div class="extra content">
+                <a>
+                  <i class="dollar icon"></i>
+                  <div class="ui blue tag label">
+                    <a class="ui blue label">Rp300.000.000,00</a>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script type="text/javascript">
+      var app = new Vue({
+        el: '#app',
+        data: {
+          msg: "hello world",
+          name: '',
+          price: 0,
+          author: '',
+          category: '',
+          stock: 0,
+          pict: '',
+          rating: '',
+          count: 0,
+          home: 'http://localhost:8080',
+          signin: 'http://localhost:8080/user.html',
+          cart: 'http://localhost:8080/cart.html',
+          signup: 'http://localhost:8080/signup.html'
+        },
+        methods: {
+          getCartCount: function(){
+            this.count = this.count + 1;
+          }
+          getAllItem: function(){
+            axios.get('http://localhost:3000/api/item/')
+            .then((data)=>{
+              console.log(data)
+            })
+            .catch((err)=>{
+              console.log(err)
+            })
+          }
+        }
+      })
+    </script>
+    <script type="text/javascript">
+      $('select').dropdown({on: 'hover'});
+      $('.special.cards .image').dimmer({
+          on: 'hover'
+        });
+      $('.modalcoba').click(function(){
+         $('.ui.modal').modal('show');
+      });
+    </script>
+  </body>
+</html>
