@@ -27,3 +27,8 @@ $("#login-button").click(function(event) {
   }
 
 });
+
+$("#regis-button").click(function(event) {
+  event.preventDefault();
+  window.location.href = './register.html';
+});
