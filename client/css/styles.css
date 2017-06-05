@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /*border: solid .5px black;*/
+}
+
+.modal-cart {
+
+}
+
+.item {
+  max-height: 350px;
+}
+
+.isinya {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.sidebar {
+  padding: 20px;
+}
+
+.image-buku {
+  height: 240px;
+  padding: 5px;
+}
+
+.image-buku > img {
+  margin: auto;
+  height: 100%;
+}
+
+.book-name {
+  font-weight: bold;
+}
+
+.book-author {
+  font-style: italic;
+  font-weight: 500;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.image-container {
+  height: 160px;
+  padding: 5px;
+}
+
+.image-container > img {
+  margin: auto;
+  height: 100%;
+}

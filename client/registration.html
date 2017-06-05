@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Buku Lapuk- Lapak Buku Bekas</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios.js"></script>
+    <script src="./js/jquery.js"></script>
+    <script src="./js/jqueryurl.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">Buku Lapuk</a>
+          </div>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="index.html">Beranda</a></li>
+            <li class="active"><a href="registration.html">Daftar | Login</a></li>
+            <li><a href="#">Kontak</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <div class="container">
+    	<div class="row">
+    		<div class="col-xs-8 col-xs-offset-2">
+          <div id="tabs">
+            <ul class="nav nav-pills">
+        			<li class="active">
+                <a  href="#register" data-toggle="tab">Daftar</a>
+        			</li>
+        			<li><a href="#login" data-toggle="tab">Masuk</a>
+        			</li>
+        		</ul>
+      			<div class="tab-content clearfix">
+      			  <div class="tab-pane active" id="register">
+                <div class="panel panel-default">
+          				<div class="panel-body">
+          					<div class="row">
+                      <div class="col-xs-12">
+                        <form method="post">
+                          <div class="form-group">
+                            <label for="name">Nama</label>
+                            <input type="text" class="form-control" id="name" placeholder="Masukkan nama anda">
+                          </div>
+                          <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Username anda">
+                          </div>
+                          <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Password anda">
+                          </div>
+                        </form>
+                      </div>
+          					</div>
+            				<div class="panel-footer">
+            					<div class="row text-center">
+            						<div class="col-xs-3 col-xs-offset-9">
+                          <a href="#" id="create" class="btn btn-success btn-block" role="button">Daftar</a>
+            						</div>
+                        <div id="result" class="col-xs-3">
+                        </div>
+            					</div>
+            				</div>
+          			  </div>
+                </div>
+      				</div>
+      				<div class="tab-pane" id="login">
+                <div class="panel panel-default">
+          				<div class="panel-body">
+          					<div class="row">
+                      <div class="col-xs-12">
+                        <form method="post">
+                          <div class="form-group">
+                            <label for="username-login">Username</label>
+                            <input type="text" class="form-control" id="username-login" placeholder="Username anda">
+                          </div>
+                          <div class="form-group">
+                            <label for="password-login">Password</label>
+                            <input type="password" class="form-control" id="password-login" placeholder="Password anda">
+                          </div>
+                        </form>
+                      </div>
+          					</div>
+            				<div class="panel-footer">
+            					<div class="row text-center">
+            						<div class="col-xs-3 col-xs-offset-9">
+                          <a href="#" id="login-button" class="btn btn-success btn-block" role="button">Masuk</a>
+            						</div>
+                        <div id="login-result" class="col-xs-4">
+                        </div>
+            					</div>
+            				</div>
+          			  </div>
+                </div>
+      				</div>
+      			</div>
+          </div>
+
+    		</div>
+    	</div>
+    </div>
+  <script type="text/javascript">
+  $(document).ready(function() {
+    $('#create').click(function(event) {
+      var name = $('#name').val();
+      var username = $('#username').val();
+      var password = $('#password').val();
+      axios.post('http://localhost:3000/signup', {
+        name: name,
+        username: username,
+        password: password
+      })
+      .then(function (response) {
+        $('#name').val(this.placeholder);
+        $('#username').val(this.placeholder);
+        $('#password').val(this.placeholder);
+        if(response.data.username == username) {
+          $('#result').append("<p>Akun berhasil dibuat. Login <a href=#login>disini</a> </p>")
+        } else {
+          console.log(response.data)
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    })
+    $('#login-button').click(function(event) {
+      $('#login-result').empty()
+      var username = $('#username-login').val();
+      var password = $('#password-login').val();
+      axios.post('http://localhost:3000/login', {
+        username: username,
+        password: password
+      })
+      .then(function (response) {
+        $('#username-login').val(this.placeholder);
+        $('#password-login').val(this.placeholder);
+        if(response.data.length < 25) {
+          $('#login-result').append(`<p style="color: red">${response.data}</p>`)
+        } else {
+          localStorage.setItem("token", response.data);
+          setInterval(window.location.href = "./index.html", 2000)
+        }
+
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    })
+  })
+  </script>
+  </body>
+</html>

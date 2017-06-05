@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Buku Lapuk- Lapak Buku Bekas</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="./js/vue.js"></script>
+    <script src="./js/axios.js"></script>
+    <script src="./js/jquery.js"></script>
+    <script src="./js/jqueryurl.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div id="history">
+      <header>
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" href="#">Buku Lapuk</a>
+            </div>
+            <ul v-if="token.length > 0"class="nav navbar-nav navbar-right">
+              <!-- <li hidden>Update</li> -->
+              <li><a href="index.html">Beranda</a></li>
+              <li class="dropdown active">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Profil Anda <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Lihat Profil</a></li>
+                  <li class="active"><a href="#">Transaksi Terdahulu</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#">Ubah Pengaturan Profil</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Kontak</a></li>
+              <li><a id="logout" href="#">Logout</a></li>
+            </ul>
+            <ul v-else class="nav navbar-nav navbar-right">
+              <li class="active"><a href="#">Beranda</a></li>
+              <li><a href="registration.html">Daftar | Login</a></li>
+              <li><a href="#">Kontak</a></li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <div class="container">
+        <div class="row">
+          <div v-if="token.length > 1" class="col-xs-12 col-md-offset-3 col-md-6">
+            <h3>Riwayat Transaksi {{ translist[0].customer.name }}</h3>
+            <ul class="list-group">
+              <li class="list-group-item" v-for="trans in translist">
+                <h5>Nomor transaksi: {{ trans._id }}</h5>
+                <p>Total: Rp {{ trans.total }}</p>
+                <p>Buku yang dibeli:</p>
+                <div class="flex-container">
+                  <div class="image-container" v-for="book in trans.booklist">
+                    <img v-bind:src="book.image" class="img-responsive img-rounded" alt="">
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div v-else class="col-xs-12 col-md-offset-3 col-md-6">
+            <h3>Silakan login terlebih dahulu</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      var app = new Vue({
+        el: '#history',
+        data: {
+          translist: [],
+          token: localStorage.getItem("token") || ''
+        },
+        created: function() {
+          this.populateTrans();
+        },
+        methods: {
+          populateTrans: function() {
+            var self = this;
+            axios.post('http://localhost:3000/api/transactions/populated', {
+              token: localStorage.getItem("token")
+            })
+            .then((response) => {
+              self.translist = response.data;
+            })
+          }
+        }
+      })
+      $(document).ready(function() {
+        $('#logout').click(function(event) {
+          console.log('tes')
+          localStorage.removeItem("token");
+          window.location.href = "./index.html";s
+        })
+      })
+    </script>
+  </body>
+</html>
