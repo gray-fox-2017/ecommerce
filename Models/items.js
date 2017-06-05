@@ -6,7 +6,8 @@ var itemSchema = new Schema({
   picture: String,
   stock: Number,
   category: String,
-  price: String
+  price: Number,
+  description: String
 })
 
 var Item = mongoose.model('Item',itemSchema)

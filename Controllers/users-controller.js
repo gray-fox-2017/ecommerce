@@ -21,7 +21,7 @@ function signup (req,res,next){
     password: hash,
     email: req.body.email
   },function(err,result){
-    res.send('Sign Up Success!')
+    res.send(result)
   })
 }
 
@@ -36,7 +36,7 @@ function login (req,res,next){
       if(bcrypt.compare(req.body.password,result.password)){
         let token = jwt.sign({_id: result.id, username: result.username, email: result.email},process.env.SECRET)
         localStorage.setItem('myKey',token)
-        res.send('login Success!')  
+        res.send(token)  
       }
       else{
         res.send('Invalid Password!')
@@ -46,10 +46,10 @@ function login (req,res,next){
 }
 
 function editUser (req,res,next){
-  User.findOne({
+  Users.findOne({
     _id: req.params.id
   },function(err,result){
-    User.updateOne({
+    Users.updateOne({
       _id: req.params.id
     },{
       username: req.body.username || result.username,
@@ -61,12 +61,13 @@ function editUser (req,res,next){
 }
 
 function deleteUser (req,res,next){
-  User.remove({
+  Users.remove({
     _id: req.params.id
   },function(err,result){
     res.send('Delete Success!')
   })
 }
+
 
 module.exports = {
   signup,login,editUser,deleteUser,UserList

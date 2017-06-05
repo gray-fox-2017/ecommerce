@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const Storage = require('dom-storage')
 const localStorage = new Storage('./db.json', {strict:false,ws:' '})
 const Token = localStorage.getItem('myKey')
+const multer = require('multer',{dest:'uploads/'})
 require('dotenv').config()
 
 function list (req,res,next){
@@ -16,15 +17,17 @@ function createItem(req,res,next){
     name: req.body.name,
     picture: req.body.picture,
     stock: req.body.stock,
-    category: req.body.category
+    category: req.body.category,
+    description: req.body.description,
+    price: req.body.price
   },function(err,result){
-    res.send(`${req.body.name} Created!`)
+    res.send(result)
   })
 }
 
 function searchCategory (req,res,next){
       Items.find({
-        category: req.body.category
+        category: req.params.category
       },function(err,result){
         res.send(result)
     })
@@ -36,6 +39,14 @@ function deleteItem (req,res,next){
   },function(err,result){
     res.send('Delete Success!')
   })
+}
+
+function getItem (req,res,next){
+  Items.findOne({
+    _id: req.params.id
+  },function(err,result){
+    res.send(result)
+  })  
 }
 
 function editItem (req,res,next){
@@ -57,5 +68,5 @@ function editItem (req,res,next){
 }
 
 module.exports = {
-  list,searchCategory,deleteItem,editItem,createItem
+  list,searchCategory,deleteItem,editItem,createItem,getItem
 }

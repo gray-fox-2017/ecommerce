@@ -10,10 +10,12 @@ router.put('/editUser/:id', UsersController.editUser)
 router.delete('/deleteUser/:id', UsersController.deleteUser)
 
 router.get('/items', ItemsController.list)
-router.post('/search', ItemsController.searchCategory)
+router.get('/search/:category', ItemsController.searchCategory)
+router.get('/getItem/:id', ItemsController.getItem)
 router.post('/createItem', ItemsController.createItem)
-router.put('/editItem/:id', ItemsController.editItem)
+router.post('/editItem/:id', ItemsController.editItem)
 router.delete('/deleteItem/:id', ItemsController.deleteItem)
+
 
 module.exports = router;
 
