@@ -89,9 +89,9 @@
         </div><!-- /.container-fluid -->
       </nav>
       <!-- header -->
-      <div class="container">
+      <div class="container ">
         <div class="row">
-          <div class="col-md-12" >
+          <div class="col-md-12 " >
             <div class="jumbotron" style="background-image:url(https://s-media-cache-ak0.pinimg.com/originals/03/b1/bc/03b1bc055c77b932865e7f19b2f414a2.jpg)">
               <div class="text-color">
                 <h1>Welcome to Flower Shop</h1>
@@ -110,8 +110,9 @@
           <div class="row">
           	<div class="col-md-12">
               <div class="row">
+                <div v-for= "(item, index) in items">
 
-                <div class="col-sm-6 col-md-4" v-for= "item in items">
+                <div class="col-sm-6 col-md-4" >
                   <div class="thumbnail" v-if="item.stock > 0">
                     <h4 class="text-center"><span class="label label-info">{{ item.category }}</span></h4>
                     <img v-bind:src="item.image" class="img-responsive">
@@ -142,6 +143,9 @@
                   <div v-else="">
                     <!-- <p>item not found</p> -->
                   </div>
+
+                </div>
+                  <div class="clearfix" v-if="index == 2"></div>
                 </div>
               </div>
             </div>
@@ -160,23 +164,24 @@
       <div class="row" style="padding:15px">
         <div class="col-md-4" style="padding:0">
           <ul class="list-group">
-           <li class="list-group-item"><a href="#"><img src="/icon/blue-old.ico" alt="">&nbsp;Aubrieta</a></li>
-           <li class="list-group-item"><a href="#"><img src="/icon/pink.ico" alt="">&nbsp;Aubrieta</a></li>
-           <li class="list-group-item"><a href="#"><img src="/icon/pink2.ico" alt="">&nbsp;Aubrieta</a></li>
+            <!-- <li class="list-group-item"><a class="btn btn-success" role="button" v-on:click="getItem('Rose')"><img src="/icon/pink.ico" alt="">Rose</a></li> -->
+           <li class="list-group-item"><a href="#" @click="getItem('Sun Flower')"><img src="/icon/blue-old.ico" alt="">&nbsp;Sun Flower</a></li>
+           <li class="list-group-item"><a href="#" @click="getItem('Rose')"><img src="/icon/pink.ico" alt="">&nbsp;Rose</a></li>
+           <li class="list-group-item"><a href="#" @click="getItem('Yellowsome')"><img src="/icon/pink2.ico" alt="">&nbsp;Yellowsome</a></li>
           </ul>
         </div>
         <div class="col-md-4" style="padding:0">
           <ul class="list-group">
-            <li class="list-group-item"><a href="#"><img src="/icon/pink3.ico" alt="">&nbsp;Aubrieta</a></li>
-            <li class="list-group-item"><a href="#"><img src="/icon/pink-rose.ico" alt="">&nbsp;Aubrieta</a></li>
-            <li class="list-group-item"><a href="#"><img src="/icon/purple.ico" alt="">&nbsp;Aubrieta</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Sun Flower')"><img src="/icon/blue-old.ico" alt="">&nbsp;Sun Flower</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Rose')"><img src="/icon/pink.ico" alt="">&nbsp;Rose</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Yellowsome')"><img src="/icon/pink2.ico" alt="">&nbsp;Yellowsome</a></li>
           </ul>
         </div>
         <div class="col-md-4" style="padding:0">
           <ul class="list-group">
-            <li class="list-group-item"><a href="#"><img src="/icon/red_rose.ico" alt="">&nbsp;Aubrieta</a></li>
-            <li class="list-group-item"><a href="#"><img src="/icon/white.ico" alt="">&nbsp;Aubrieta</a></li>
-            <li class="list-group-item"><a href="#"><img src="/icon/sun_flower.ico" alt="">&nbsp;Aubrieta</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Sun Flower')"><img src="/icon/blue-old.ico" alt="">&nbsp;Sun Flower</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Rose')"><img src="/icon/pink.ico" alt="">&nbsp;Rose</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Yellowsome')"><img src="/icon/pink2.ico" alt="">&nbsp;Yellowsome</a></li>
           </ul>
         </div>
       </div>
@@ -198,20 +203,48 @@
           // this.items.push({jml:0})
         },
         methods: {
+          category(params) {
+            var self = this;
+            if (category !== null) {
+              console.log(category);
+              axios.get(`http://localhost:3000/api/items/${params}`, { headers: {'token':localStorage.getItem('token')}})
+              .then(function(response){
+                self.items = response.data
+              })
+              .catch(function(err) {
+                console.log(err);
+              })
+            } else {
+              console.log('error');
+            }
+
+          },
           logOut() {
             window.localStorage.removeItem('token')
             window.location.href = "/"
           },
-          getItem: function() {
+          getItem: function(category) {
             var self = this;
-            axios.get('http://localhost:3000/api/items', { headers: {'token':localStorage.getItem('token')}})
-            .then(function (response) {
-              console.log(JSON.stringify(response.data));
-              self.items = response.data
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
+            if (category !== undefined) {
+              console.log(category);
+              axios.get('http://localhost:3000/api/items/'+category, { headers: {'token':localStorage.getItem('token')}})
+              .then(function(response){
+                self.items = response.data
+              })
+              .catch(function(err) {
+                console.log(err);
+              })
+            } else {
+              axios.get('http://localhost:3000/api/items', { headers: {'token':localStorage.getItem('token')}})
+              .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                self.items = response.data
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+            }
+
           },
           addToCart: function(item) {
             var cart = this.cart
@@ -280,6 +313,8 @@
               .then((result) => {
                 console.log(result.data)
                 console.log(result)
+                self.cart= []
+
               })
               .catch(err => {
                 console.log(err);
