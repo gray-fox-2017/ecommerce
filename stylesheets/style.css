@@ -1,0 +1,46 @@
+.jumbotron {
+  background-repeat: no-repeat;
+  background-size: cover;
+  text-decoration-color: white;
+  height: auto;
+}
+.text-color {
+  color: white;
+}
+
+
+.container-fluid {
+  background-color: #21313F;
+}
+a href {
+  background-color: white;
+  color: white;
+}
+
+.navbar-default .navbar-nav > li > a {
+  color: white !important;
+}
+.navbar-brand {
+  color: white !important;
+}
+.panel-color {
+  background-color: #21313F;
+  height: 40px;
+  color: white;
+}
+.list-group {
+  color: white;
+}
+.label-info {
+  background-color: #21313F !important;
+}
+.img-responsive {
+  max-height: 400px;
+}
+.thumbnail > img {
+  height: 250px !important;
+}
+.img-in-table {
+  width: 50px;
+  height: auto;
+}

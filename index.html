@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ecommerce-Layout</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/footer.css">
+
+    <!-- Latest compiled and minified CSS -->
+    <script src="https://unpkg.com/vue"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <div class="navbar-header">
+
+            <a class="navbar-brand" href="#">Erler-Store</a>
+
+          </div>
+
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+
+            <ul class="nav navbar-nav navbar-right">
+              <!-- <li data-toggle="modal" data-target="#myModal"><a><span class="glyphicon glyphicon-shopping-cart" style="margin-right: 10px"></span>&nbsp;Cart</a></li> -->
+              <!-- <li data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-shopping-cart" style="margin-right: 10px"></span>&nbsp;Cart</li> -->
+              <!-- Trigger the modal with a button -->
+                <!-- <button type="button" class="btn" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-shopping-cart"></span>Cart</button> -->
+                <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-shopping-cart"></span>Cart</a></li>
+                <li v-if="token !== null"><a @click="logOut">Logout</a></li>
+                <li v-else="token == null"><a href="login.html">Login</a></li>
+                <!-- Modal -->
+                <div id="myModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div class="modal-body">
+                          <table class="table">
+                            <tr>
+                              <th>Gambar</th>
+                              <th>Nama</th>
+                              <th>Harga</th>
+                              <th>Kuantitas</th>
+                              <th>Total</th>
+                            </tr>
+                            <tr v-for="item in cart">
+                              <input type="hidden" name="" v-model:value="item.count">
+                              <td><img class="img-in-table" v-bind:src="item.image"   alt=""></td>
+                              <td>{{ item.name }}</td>
+                              <td>{{ item.price }}</td>
+                              <td><input v-on:keyup="calculate()" v-model="item.count" v-bind:max="item.stock" type="text" ></td>
+                              <td>{{ countSubTotal(item.count, item.price) }}</td>
+                            </tr>
+
+                          </table>
+
+                      </div>
+                      <div class="modal-footer">
+                        <p><b> GRAND TOTAL : {{ total }}</b></p>
+                        <!-- <button type="button" v-on:click="calculate()">Update</button> -->
+                        <button v-on:click="checkout" type="button" class="btn btn-default" data-dismiss="modal">Checkout</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- end of modal -->
+            </ul>
+          </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+      <!-- header -->
+      <div class="container ">
+        <div class="row">
+          <div class="col-md-12 " >
+            <div class="jumbotron" style="background-image:url(https://s-media-cache-ak0.pinimg.com/originals/03/b1/bc/03b1bc055c77b932865e7f19b2f414a2.jpg)">
+              <div class="text-color">
+                <h1>Welcome to Flower Shop</h1>
+                <p>we have anything about flower here</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <!-- end of header -->
+
+      <!-- main-content -->
+      <div class="container">
+          <div class="row">
+          	<div class="col-md-12">
+              <div class="row">
+                <div v-for= "(item, index) in items">
+
+                <div class="col-sm-6 col-md-4" >
+                  <div class="thumbnail" v-if="item.stock > 0">
+                    <h4 class="text-center"><span class="label label-info">{{ item.category }}</span></h4>
+                    <img v-bind:src="item.image" class="img-responsive">
+                    <div class="caption">
+                      <div class="row">
+                        <div class="col-md-6 col-xs-6">
+                          <h3>{{ item.name }}</h3>
+                        </div>
+                        <div class="col-md-6 col-xs-6 price">
+                          <h3>
+                          <label>Rp. {{ item.price }}</label></h3>
+                        </div>
+                      </div>
+                      <p>{{ item.description }}</p>
+                      <div class="row">
+                        <!-- <div class="col-md-3">
+                          <a class="btn btn-primary btn-product"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a>
+                        </div> -->
+                        <div class="col-md-12">
+                          <!-- <button type="button" class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart" v-on:click="addToCart(item)"></span> Buy</div></button> -->
+                          <!-- <div class="col-md-1">  -->
+                          <a class="btn btn-success" role="button" v-on:click="addToCart(item)">Beli</a>
+                        </div>
+                          <!-- <a class="btn btn-success btn-product"><span class="glyphicon glyphicon-shopping-cart" v-on:click="addToCart(item)"></span> Buy</a></div> -->
+                      </div>
+                    </div>
+                  </div>
+                  <div v-else="">
+                    <!-- <p>item not found</p> -->
+                  </div>
+
+                </div>
+                  <div class="clearfix" v-if="index == 2"></div>
+                </div>
+              </div>
+            </div>
+        	</div>
+        </div>
+
+    <!-- end of main-content -->
+
+    <!-- main-categor -->
+      <div class="container">
+      <div class="col-md-12" style="padding:0">
+        <ul class="list-group" style="margin-bottom:0">
+         <li class="list-group-item text-center" style="background-color:#21313F"><b>Category</b></li>
+        </ul>
+      </div>
+      <div class="row" style="padding:15px">
+        <div class="col-md-4" style="padding:0">
+          <ul class="list-group">
+            <!-- <li class="list-group-item"><a class="btn btn-success" role="button" v-on:click="getItem('Rose')"><img src="/icon/pink.ico" alt="">Rose</a></li> -->
+           <li class="list-group-item"><a href="#" @click="getItem('Sun Flower')"><img src="/icon/blue-old.ico" alt="">&nbsp;Sun Flower</a></li>
+           <li class="list-group-item"><a href="#" @click="getItem('Rose')"><img src="/icon/pink.ico" alt="">&nbsp;Rose</a></li>
+           <li class="list-group-item"><a href="#" @click="getItem('Yellowsome')"><img src="/icon/pink2.ico" alt="">&nbsp;Yellowsome</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4" style="padding:0">
+          <ul class="list-group">
+            <li class="list-group-item"><a href="#" @click="getItem('Sun Flower')"><img src="/icon/blue-old.ico" alt="">&nbsp;Sun Flower</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Rose')"><img src="/icon/pink.ico" alt="">&nbsp;Rose</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Yellowsome')"><img src="/icon/pink2.ico" alt="">&nbsp;Yellowsome</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4" style="padding:0">
+          <ul class="list-group">
+            <li class="list-group-item"><a href="#" @click="getItem('Sun Flower')"><img src="/icon/blue-old.ico" alt="">&nbsp;Sun Flower</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Rose')"><img src="/icon/pink.ico" alt="">&nbsp;Rose</a></li>
+            <li class="list-group-item"><a href="#" @click="getItem('Yellowsome')"><img src="/icon/pink2.ico" alt="">&nbsp;Yellowsome</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    </div>
+    <script type="text/javascript">
+      var app = new Vue ({
+        el: '#app',
+        jml:0,
+        data: {
+          items: [],
+          cart: [],
+          total:0,
+          token: localStorage.getItem("token")
+        },
+        created: function() {
+          this.getItem()
+          // this.items.push({jml:0})
+        },
+        methods: {
+          category(params) {
+            var self = this;
+            if (category !== null) {
+              console.log(category);
+              axios.get(`http://localhost:3000/api/items/${params}`, { headers: {'token':localStorage.getItem('token')}})
+              .then(function(response){
+                self.items = response.data
+              })
+              .catch(function(err) {
+                console.log(err);
+              })
+            } else {
+              console.log('error');
+            }
+
+          },
+          logOut() {
+            window.localStorage.removeItem('token')
+            window.location.href = "/"
+          },
+          getItem: function(category) {
+            var self = this;
+            if (category !== undefined) {
+              console.log(category);
+              axios.get('http://localhost:3000/api/items/'+category, { headers: {'token':localStorage.getItem('token')}})
+              .then(function(response){
+                self.items = response.data
+              })
+              .catch(function(err) {
+                console.log(err);
+              })
+            } else {
+              axios.get('http://localhost:3000/api/items', { headers: {'token':localStorage.getItem('token')}})
+              .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                self.items = response.data
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+            }
+
+          },
+          addToCart: function(item) {
+            var cart = this.cart
+            // var index = cart.findIndex(value => value._id == item._id)
+            // var index = 0
+            let data = 0
+            if(item.stock > 0) {
+              for (let i = 0; i < cart.length; i++) {
+                if(cart[i]._id == item._id) {
+                  data++
+                  var index = i
+                }
+              }
+            }
+            if (data == 0) {
+              item.count = 1;
+              item.stock--;
+              cart.push(item);
+            } else {
+              cart[index].count++;
+              cart[index].stock--;
+              cart[index] = item;
+            }
+
+            console.log(cart);
+          },
+          countSubTotal: function(price, count) {
+            return price * count
+          },
+          calculate: function() {
+            var total=0
+            this.cart.forEach(item => {
+              total += (item.count * item.price)
+              console.log('ini teksnya dibawah');
+              console.log(total);
+            })
+            app.total = total
+
+          },
+          removeCart: function(item, index) {
+            item.stock += item.count;
+            item.count = 0
+            this.cart.splice(index, 1)
+          },
+          updateStok: function() {
+            var itemlist = this.cart
+
+            axios.put('http://localhost:3000/api/items', { itemlist }, { headers: {'token':localStorage.getItem('token')}})
+            .then((result) => {
+              console.log(result.data)
+              console.log(result)
+            })
+            .catch(err => {
+              console.log(err);
+            })
+          },
+          checkout: function() {
+            var itemlist = this.cart
+            var self = this
+            axios.post('http://localhost:3000/api/transactions',{ itemlist }, { headers: {'token':localStorage.getItem('token')}})
+            .then((response) => {
+              window.alert('terimakasih telah membeli bunga dari kami!')
+              // self.updateStok()
+              console.log('ini yg mau diubahhh',itemlist);
+              axios.put('http://localhost:3000/api/items/'+itemlist[0]._id+'', itemlist[0], { headers: {'token':localStorage.getItem('token')}})
+              .then((result) => {
+                console.log(result.data)
+                console.log(result)
+                self.cart= []
+
+              })
+              .catch(err => {
+                console.log(err);
+              })
+            })
+            .catch((error) => {
+              console.log('err', error);
+            })
+
+
+          }
+
+
+        }
+      })
+    </script>
+  </body>
+  <footer>
+    <div class="footer" id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3> Contact </h3>
+                    <ul>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3> Important Links </h3>
+                    <ul>
+                        <li> <a href="#"> Admission </a> </li>
+                        <li> <a href="#"> Academic </a> </li>
+                        <li> <a href="#"> Career </a> </li>
+                        <li> <a href="#"> Administration </a> </li>
+                        <li> <a href="#"> Notice </a> </li>
+                        <li> <a href="#"> Tender </a> </li>
+                        <li> <a href="login.php"> Teacher Login </a> </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3> Location </h3>
+                    <ul>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                        <li> <a href="#"> Lorem Ipsum </a> </li>
+                    </ul>
+                </div>
+            </div>
+            <!--/.row-->
+        </div>
+        <!--/.container-->
+    </div>
+
+    <div class="all_category_container">
+
+    </div>
+
+
+    <!--/.footer-->
+    <div class="footer-bottom">
+        <div class="container">
+            <p class="pull-left"> Copyright © 2017, & Copyleft &copy; 2017.</p>
+            <div class="pull-right">
+                <ul class="nav nav-pills payments">
+                    <li><i class="fa fa-cc-visa"></i></li>
+                    <li><i class="fa fa-cc-mastercard"></i></li>
+                    <li><i class="fa fa-cc-amex"></i></li>
+                    <li><i class="fa fa-cc-paypal"></i></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--/.footer-bottom-->
+</footer>
+</html>
