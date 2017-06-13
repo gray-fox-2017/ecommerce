@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Shopping Cart</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Items</h1>
+      <button type="button" name="button" v-on:click=getItems >Get All Items</button>
+      <ul>
+        <li v-for="item in items" >{{item.name}}</li>
+      </ul>
+      <h1>Customers</h1>
+      <h1>Carts</h1>
+    </div>
+  </body>
+  <script type="text/javascript">
+  var app = new Vue({
+    data:{
+      items : []
+    },
+    created: {
+      this.getItems();
+    },
+    methods: {
+      getItems: function() {
+        var self = this;
+        axios.get('localhost:3000/items')
+        .then(function(response) {
+          console.log(response.data);
+          self.items = response.data
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
+      }
+    }
+  })
+  </script>
+</html>
