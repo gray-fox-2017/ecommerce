@@ -1,0 +1,35 @@
+{
+  "name": "ecommerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aldyadk/ecommerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aldyadk/ecommerce/issues"
+  },
+  "homepage": "https://github.com/aldyadk/ecommerce#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "bootstrap": "^3.3.7",
+    "cors": "^2.8.3",
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "jsonwebtoken": "^7.4.1",
+    "mongodb": "^2.2.27",
+    "mongoose": "^4.10.4",
+    "mongoose-type-email": "^1.0.5",
+    "mongoose-unique-validator": "^1.0.5",
+    "nodemon": "^1.11.0",
+    "simplecrypt": "^0.1.0"
+  }
+}
