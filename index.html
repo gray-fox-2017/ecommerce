@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>One Market for Everyone!</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div id="app"class="container">
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">ADK Marketplace</a>
+          </div>
+          <ul class="nav navbar-nav navbar-left">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Category <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Promo</a></li>
+                <li><a href="#">Tiket</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Handphone</a></li>
+                <li><a href="#">Komputer</a></li>
+                <li><a href="#">Elektronik</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Kamera</a></li>
+                <li><a href="#">Hobi & Koleksi</a></li>
+                <li><a href="#">Olahraga</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Perawatan & Kecantikan</a></li>
+                <li><a href="#">Kesehatan</a></li>
+                <li><a href="#">Fashion</a></li>
+                <li><a href="#">Perlengkapan Bayi</a></li>
+                <li><a href="#">Rumah Tangga</a></li>
+              </ul>
+            </li>
+          </ul>
+          <div class="navbar-left">
+            <form class="navbar-form"action="/" method="post">
+              <div class="input-group" style="width:95%">
+                <input type="text" class="form-control" value="" placeholder="Search...">
+                <div class="input-group-btn">
+                  <button v-on:click="" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" data-toggle="modal" v-on:click="sumTotal()" data-target="#myCart"><span class="glyphicon glyphicon-shopping-cart"></span> My Cart</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div class="container" style="margin-top:70px">
+        <div class="container" style="display:flex">
+          <div style="display:flex;flex-direction:column">
+            <p>Shop By Category</p>
+            <a href="#">Promo</a>
+            <a href="#">Tiket</a>
+            <a href="#">Perawatan & Kecantikan</a>
+            <a href="#">Kesehatan</a>
+            <a href="#">Fashion</a>
+            <a href="#">Handphone</a>
+            <a href="#">Komputer</a>
+            <a href="#">Elektronik</a>
+            <a href="#">Kamera</a>
+            <a href="#">Hobi & Koleksi</a>
+            <a href="#">Olahraga</a>
+            <a href="#">Perlengkapan Bayi</a>
+            <a href="#">Rumah Tangga</a>
+          </div>
+          <a href="#"><img src="https://s2.bukalapak.com/uploads/flash_banner/70071/s-196-412/Banner_3_Berbuka10%281%29.jpg.webp"></a>
+          <div class="">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+              <!-- Indicators -->
+              <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+                <li data-target="#myCarousel" data-slide-to="3"></li>
+                <li data-target="#myCarousel" data-slide-to="4"></li>
+              </ol>
+              <!-- Wrapper for slides -->
+              <div class="carousel-inner">
+                <div class="item active">
+                  <img src="https://s1.bukalapak.com/uploads/flash_banner/16561/s-196-196/392x392.jpg.webp">
+                </div>
+                <div class="item">
+                  <img src="https://s1.bukalapak.com/uploads/flash_banner/17561/s-196-196/392x392.jpg.webp">
+                </div>
+                <div class="item">
+                  <img src="https://s1.bukalapak.com/uploads/flash_banner/18561/s-196-196/392x392.jpg.webp">
+                </div>
+                <div class="item">
+                  <img src="https://s1.bukalapak.com/uploads/flash_banner/11661/s-196-196/392x392.jpg.webp">
+                </div>
+                <div class="item">
+                  <img src="https://s1.bukalapak.com/uploads/flash_banner/10661/s-196-196/392x392.jpg.webp">
+                </div>
+              </div>
+              <!-- Left and right controls -->
+              <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Previous</span>
+              </a>
+              <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Next</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div id="myCart" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">My Cart</h4>
+              </div>
+              <div class="modal-body">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Qty</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in cart">
+                        <td>{{item.name}}</td>
+                        <td>{{item.price}}</td>
+                        <td>{{item.quantity}}</td>
+                      </tr>
+                      <tr>
+                        <td>Total =</td>
+                        <td>{{total}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row list-item">
+            <div class="col-sm-3 col-xs-12" v-for="item in items">
+              <img class="img-circle" v-bind:src="defaultImage(item.image_url)" alt="Generic placeholder image" width="140" height="140">
+              <a href="#"><p>{{item.name}}</p></a>
+              <a href="#"><p>{{truncateText(item.description)}}</p></a>
+              <h4>Price: Rp {{item.price}} </h4>
+              <p><a class="btn btn-default" v-on:click="addToCart(item)" role="button">Buy</a></p>
+            </div>
+          </div>
+
+          <hr class="featurette-divider">
+
+          <footer>
+            <p class="pull-right"><a href="#">Back to top</a></p>
+            <p>&copy; 2017 ADK, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      var App = new Vue({
+        el:"#app",
+        data:{
+          items:[],
+          cart:[],
+          total:0
+        },
+        methods:{
+          getItems(){
+            var self = this
+            axios.get("http://localhost:3000/api/items")
+            .then(response=>{
+              self.items=response.data
+            })
+            .catch(err=>{
+              console.log(err);
+            })
+          },
+          truncateText(text){
+            if(text.length>100){
+              text = text.substr(0,100) + '...'
+            }
+            return text
+          },
+          defaultImage(image_url){
+            if(image_url.length==0){
+              image_url='png/2.png'
+            }
+            return image_url
+          },
+          addToCart(item){
+            var index = this.cart.findIndex(element=>{
+              return element._id == item._id
+            })
+            if(index!=-1){
+              this.cart[index].quantity++
+              console.log(this.cart);
+            } else {
+              item.quantity=1
+              this.cart.push(item)
+            }
+          },
+          sumTotal(){
+            this.total=0
+            this.cart.forEach(item=>{
+              this.total = this.total + (item.quantity * item.price)
+            })
+          }
+        },
+        created:function(){
+          this.getItems()
+        }
+      })
+    </script>
+  </body>
+</html>
